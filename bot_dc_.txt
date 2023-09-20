@@ -1,0 +1,51 @@
+import mysql.connector
+
+# Conexión a la base de datos
+db_connection = mysql.connector.connect(
+    host='tu_host_mysql',
+    user='tu_usuario_mysql',
+    password='tu_contraseña_mysql',
+    database='nombre_de_tu_base_de_datos'
+)
+
+# Crear un cursor para ejecutar consultas SQL
+cursor = db_connection.cursor()
+
+# Función para insertar datos en la base de datos
+def insertar_datos(nombre, edad):
+    sql_query = "INSERT INTO tabla (nombre, edad) VALUES (%s, %s)"
+    values = (nombre, edad)
+    cursor.execute(sql_query, values)
+    db_connection.commit()
+    print("Datos insertados correctamente.")
+
+# Función para obtener datos de la base de datos
+def obtener_datos():
+    sql_query = "SELECT nombre, edad FROM tabla"
+    cursor.execute(sql_query)
+    result = cursor.fetchall()
+    print("Datos obtenidos:")
+    for row in result:
+        print(f"Nombre: {row[0]}, Edad: {row[1]}")
+
+# Main loop del bot
+while True:
+    print("1. Insertar datos")
+    print("2. Obtener datos")
+    print("3. Salir")
+    opcion = int(input("Selecciona una opción: "))
+
+    if opcion == 1:
+        nombre = input("Ingresa el nombre: ")
+        edad = int(input("Ingresa la edad: "))
+        insertar_datos(nombre, edad)
+
+    elif opcion == 2:
+        obtener_datos()
+
+    elif opcion == 3:
+        break
+
+# Cerrar la conexión a la base de datos al salir del bot
+cursor.close()
+db_connection.close()
